@@ -44,7 +44,7 @@ namespace RustServerUpdateDumper.Functions
                 {
                     FileName = "cmd.exe",
                     Arguments = "/C " + Path.Combine(_config.steamcmdPath, "steamcmd.exe") + " +force_install_dir " + serverPath + " +login anonymous " + updateCommand + " +quit",
-                    WorkingDirectory = _config.Path
+                    WorkingDirectory = _config.steamcmdPath
                 };
 
                 process.Start();
