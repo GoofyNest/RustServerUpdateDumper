@@ -13,23 +13,26 @@ namespace RustServerUpdateDumper
 
         static void Main(string[] args)
         {
-            _config.steamcmdPath = Path.Combine(_config.Path, _config.steamcmdPath);
-            _config.liveServerPath = Path.Combine(_config.Path, _config.liveServerPath);
-            _config.stagingServerPath = Path.Combine(_config.Path, _config.stagingServerPath);
-
-            _config.liveServerDumpPath = Path.Combine(_config.liveServerPath, "dump");
-            _config.stagingServerDumpPath = Path.Combine(_config.stagingServerPath, "dump");
-
             if (!File.Exists("config.json"))
+            {
+                _config.steamcmdPath = Path.Combine(_config.Path, _config.steamcmdPath);
+                _config.liveServerPath = Path.Combine(_config.Path, _config.liveServerPath);
+                _config.stagingServerPath = Path.Combine(_config.Path, _config.stagingServerPath);
+
+                _config.liveServerDumpPath = Path.Combine(_config.liveServerPath, "dump");
+                _config.stagingServerDumpPath = Path.Combine(_config.stagingServerPath, "dump");
+
+                Directory.CreateDirectory(_config.steamcmdPath);
+                Directory.CreateDirectory(_config.steamcmdPath);
+                Directory.CreateDirectory(_config.stagingServerPath);
+                Directory.CreateDirectory(_config.liveServerDumpPath);
+                Directory.CreateDirectory(_config.stagingServerDumpPath);
+
                 File.WriteAllText("config.json", JsonConvert.SerializeObject(_config, Newtonsoft.Json.Formatting.Indented));
 
-            _config = JsonConvert.DeserializeObject<Config>(File.ReadAllText("config.json"));
+            }
 
-            Directory.CreateDirectory(_config.steamcmdPath);
-            Directory.CreateDirectory(_config.steamcmdPath);
-            Directory.CreateDirectory(_config.stagingServerPath);
-            Directory.CreateDirectory(_config.liveServerDumpPath);
-            Directory.CreateDirectory(_config.stagingServerDumpPath);
+            _config = JsonConvert.DeserializeObject<Config>(File.ReadAllText("config.json"));
 
             if (!File.Exists(Path.Combine(_config.steamcmdPath, "steamcmd.exe")))
             {
@@ -58,6 +61,10 @@ namespace RustServerUpdateDumper
 
 
             File.WriteAllText("config.json", JsonConvert.SerializeObject(_config, Newtonsoft.Json.Formatting.Indented));
+
+
+            Console.WriteLine(DateTime.Now + " Press any key to init the dumper process");
+            Console.ReadKey();
 
             DumpServer.InitDumper(true);
 
